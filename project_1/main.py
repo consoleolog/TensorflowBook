@@ -1,22 +1,37 @@
+import os
+
+import numpy as np
+import pandas as pd
 import tensorflow as tf
 
-X = tf.constant( [ [10,20,30,40] ])
-W = tf.constant( [ [100,200,300,400] ])
+def get_train_data():
+    df = pd.read_csv(f"{os.getcwd()}/project_1/data/gpascore.csv")
+    df.dropna(inplace=True)
 
-print(tf.add(X,W))
+    train_x = []
+    train_y = []
 
-node1 = tf.matmul( X, tf.transpose(W) )
-print(node1)
+    for i, data in df.iterrows():
+        train_x.append([ data["gre"], data["gpa"], data["rank"] ])
+        train_y.append([ data["admit"] ])
 
-zeros = tf.zeros([2, 2, 3])
-print(zeros)
+    return {
+        "trainX": train_x,
+        "trainY": train_y
+    }
 
-tf_variable = tf.Variable(1.0)
-print(tf_variable)
-print(tf_variable.numpy())
-tf_variable.assign(2)
-print(tf_variable)
+model = tf.keras.models.Sequential([
+    tf.keras.layers.Dense(units=64, activation='relu'),
+    tf.keras.layers.Dense(units=128, activation='relu'),
+    tf.keras.layers.Dense(units=256, activation='relu'),
+    tf.keras.layers.Dense(units=64, activation='relu'),
+    tf.keras.layers.Dense(units=32, activation='relu'),
+    tf.keras.layers.Dense(units=8, activation='relu'),
+    tf.keras.layers.Dense(units=1, activation='sigmoid')
+])
 
+model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 
+result = get_train_data()
 
-
+model.fit(x=np.array( result["trainX"] ), y=np.array( result["trainY"] ), epochs=100)

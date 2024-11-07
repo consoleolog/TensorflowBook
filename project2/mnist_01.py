@@ -20,7 +20,7 @@ x = tf.keras.layers.Flatten()(x)
 x = tf.keras.layers.Dense(32, activation='relu')(x)
 outputs = tf.keras.layers.Dense(10, activation='softmax')(x)
 
-model = tf.keras.Model(inputs=inputs, outputs=outputs, name="minist_01")
+model = tf.keras.Model(inputs=inputs, outputs=outputs, name="mnist_01")
 
 model.summary()
 
@@ -39,5 +39,5 @@ es = tf.keras.callbacks.EarlyStopping(
 train_x = train_x / 255.0
 test_x = test_x / 255.0
 
-model.fit(np.array( train_x ), np.array( tf.one_hot(train_y, 10) ), epochs=10, callbacks=[es,tensorboard])
+model.fit(np.array( train_x ), np.array( tf.one_hot(train_y, 10) ), epochs=5, callbacks=[es,tensorboard])
 model.save(f"{os.getcwd()}/project2/{model.name}")

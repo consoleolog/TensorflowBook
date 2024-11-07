@@ -13,21 +13,20 @@ import tensorflow as tf
 
 # print(train_x.shape)
 
-inputs = tf.keras.Input(shape=(28, 28, 1)) # color 사진이면 3
-x = tf.keras.layers.Conv2D(64,(3, 3), padding='same', activation='relu')(inputs)
-x = tf.keras.layers.MaxPool2D((2, 2), padding='same')(x)
+inputs = tf.keras.Input(shape=(28, 28))
+x = tf.keras.layers.Dense(64, activation='relu')(inputs)
 x = tf.keras.layers.Dense(128, activation='relu')(x)
 x = tf.keras.layers.Flatten()(x)
 x = tf.keras.layers.Dense(32, activation='relu')(x)
 outputs = tf.keras.layers.Dense(10, activation='softmax')(x)
 
-model = tf.keras.Model(inputs=inputs, outputs=outputs, name="02")
+model = tf.keras.Model(inputs=inputs, outputs=outputs, name="minist_01")
 
 model.summary()
 
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-LOG_PATH = f"{os.getcwd()}/project2/logs/{model.name}_{time.strftime('%Y_%m%d_%H_%M_%S')}"
+LOG_PATH = f"{os.getcwd()}/project2/logs/{model.name}_{time.strftime('%Y_%m%d-%H_%M_%S')}"
 
 tensorboard = tf.keras.callbacks.TensorBoard(log_dir=LOG_PATH)
 
@@ -37,16 +36,8 @@ es = tf.keras.callbacks.EarlyStopping(
         mode='min' # max
     )
 
-train_x.reshape( (60000, 28, 28 , 1) )
-test_x.reshape( (10000, 28, 28 , 1) )
-
 train_x = train_x / 255.0
 test_x = test_x / 255.0
 
-model.fit(np.array( train_x ), np.array( tf.one_hot(train_y, 10) ),
-          validation_data=(np.array( test_x ), np.array(tf.one_hot(test_y, 10) )),
-          epochs=10, callbacks=[es,tensorboard])
-
-model.evaluate( np.array( test_x ), np.array( tf.one_hot(test_y, 10) ) )
-
+model.fit(np.array( train_x ), np.array( tf.one_hot(train_y, 10) ), epochs=10, callbacks=[es,tensorboard])
 model.save(f"{os.getcwd()}/project2/{model.name}")

@@ -3,3 +3,4 @@ setuptools~=75.1.0
 tensorflow-gpu~=2.10.0
 pandas~=2.2.2
 numpy~=1.26.4
+keras-tuner~=1.4.7

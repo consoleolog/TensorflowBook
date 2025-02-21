@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd 
 from sklearn.model_selection import train_test_split
 
-root_path = f"{os.getcwd()}/chap01"
+root_path = f"{os.getcwd()}/base"
 
 df = pd.read_csv(f"{root_path}/data/gpascore.csv")
 df.dropna(inplace=True)
@@ -14,12 +14,14 @@ y = df['rank'].to_numpy()
 
 trainX, testX, trainY, testY = train_test_split(X, y, test_size=0.2, random_state=42)
 
-inputs = tf.keras.Input(shape=(None, 1, 3))
+
+inputs = tf.keras.Input(shape=(None, 3))
 x = tf.keras.layers.Dense(units=64, activation='relu')(inputs)
 x = tf.keras.layers.Dense(units=128, activation='relu')(x)
 x = tf.keras.layers.Dense(units=32, activation='relu')(x)
 outputs = tf.keras.layers.Dense(units=1, activation='sigmoid')(x)
 model = tf.keras.Model(inputs=inputs, outputs=outputs)
+model.summary()
 model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
 model.fit(trainX, trainY, validation_data=(testX, testY), epochs=10)
 

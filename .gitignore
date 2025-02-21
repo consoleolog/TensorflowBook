@@ -1,4 +1,8 @@
 # Byte-compiled / optimized / DLL files
+/**/data/*
+/**/models/*
+/**/checkpoint/*
+/**/logs/*
 __pycache__/
 *.py[cod]
 *$py.class
@@ -181,4 +185,3 @@ cython_debug/
 .idea
 __pycache__
 /**/__pycache__
->>>>>>> e4c1d942687ce7c9fca31c9aef70652204a5906b
